@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -55,5 +56,20 @@ var _ = Describe("Cloning a git repo", func() {
 			Expect(err).ToNot(HaveOccurred())
 		})
 
+	})
+
+	FContext("rev-list", func() {
+		It("lists commits", func() {
+			repo, err := git.OpenRepository("/Users/taylor/workspace/concourse")
+			Expect(err).ToNot(HaveOccurred())
+
+			oid, err := git.NewOid("eb4c434bba9ba2e256241e9fe4797ff46226f2e5")
+			Expect(err).ToNot(HaveOccurred())
+			commit, err := repo.LookupCommit(oid)
+			Expect(err).ToNot(HaveOccurred())
+			tree, err := commit.Tree()
+			Expect(err).ToNot(HaveOccurred())
+			fmt.Println("tree:", tree.EntryCount())
+		})
 	})
 })
